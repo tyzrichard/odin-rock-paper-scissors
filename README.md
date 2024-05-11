@@ -1,2 +1,2 @@
-# odin-rock-paper-scissors
-Simple Rock-Paper-Scissors game made using Javascript.
+# Rock, Paper Scissors!
+A simple game I made using Javascript, as part of the Odin Foundations course.
