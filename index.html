@@ -10,22 +10,40 @@
     function getComputerChoice () {
       let choice = Math.floor(Math.random() * 3) //floors value within range 0 to 3
       if (choice === 0) {
-        return "rock"
+        return "Rock"
       } else if (choice === 1) {
-        return "paper"
+        return "Paper"
       } else {
-        return "scissors"
+        return "Scissors"
       }
     }
 
     function getHumanChoice () {
       let choice = prompt("Player, you choice (Rock, Paper, or Scissors): ")
-      console.log(choice)
+      choice = choice[0].toUpperCase() + choice.slice(1).toLowerCase()
       return choice
     }
 
     let humanScore = 0, computerScore = 0
     
+    function playRound (humanChoice, computerChoice) {
+      if (humanChoice === computerChoice) {
+        console.log(`Both players chose ${humanChoice}, resulting in a tie!`)
+      } else if ((humanChoice == 'Rock' && computerChoice == 'Scissors') || (humanChoice == 'Scissors' && computerChoice == 'Paper') || (humanChoice == 'Paper' && computerChoice == 'Rock')) {
+        console.log(`You win! ${humanChoice} beats ${computerChoice}`)
+        humanScore++
+      } else if (humanChoice == 'Rock' || humanChoice == 'Scissors' || humanChoice == "Paper"){
+        console.log(`You lose! ${computerChoice} beats ${humanChoice}`)
+        computerScore++
+      } else {
+        console.log("Invalid Input, please try again.")
+      }
+    }
+
+    const humanSelection = getHumanChoice();
+    const computerSelection = getComputerChoice();
+
+    playRound(humanSelection, computerSelection);
   </script>
 </body>
 </html>
