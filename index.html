@@ -24,26 +24,44 @@
       return choice
     }
 
-    let humanScore = 0, computerScore = 0
+    function playGame () {
+      let humanScore = 0, computerScore = 0
+      let round = 1
     
-    function playRound (humanChoice, computerChoice) {
-      if (humanChoice === computerChoice) {
-        console.log(`Both players chose ${humanChoice}, resulting in a tie!`)
-      } else if ((humanChoice == 'Rock' && computerChoice == 'Scissors') || (humanChoice == 'Scissors' && computerChoice == 'Paper') || (humanChoice == 'Paper' && computerChoice == 'Rock')) {
-        console.log(`You win! ${humanChoice} beats ${computerChoice}`)
-        humanScore++
-      } else if (humanChoice == 'Rock' || humanChoice == 'Scissors' || humanChoice == "Paper"){
-        console.log(`You lose! ${computerChoice} beats ${humanChoice}`)
-        computerScore++
+      function playRound (humanChoice, computerChoice) {
+        if (humanChoice === computerChoice) {
+          console.log(`Both players chose ${humanChoice}, resulting in a tie!`)
+        } else if ((humanChoice == 'Rock' && computerChoice == 'Scissors') || (humanChoice == 'Scissors' && computerChoice == 'Paper') || (humanChoice == 'Paper' && computerChoice == 'Rock')) {
+          console.log(`You win! Your ${humanChoice} beats the opponent's ${computerChoice}.`)
+          humanScore++
+        } else if (humanChoice == 'Rock' || humanChoice == 'Scissors' || humanChoice == "Paper"){
+          console.log(`You lose! The opponent's ${computerChoice} beats your ${humanChoice}.`)
+          computerScore++
+        } else {
+          console.log("Invalid Input, please try again.")
+          round--
+        }
+        round++
+      }
+
+      while (round <= 5) {
+        const humanSelection = getHumanChoice();
+        const computerSelection = getComputerChoice();
+        playRound(humanSelection, computerSelection)
+      }
+      
+      if (humanScore > computerScore) {
+        console.log(`Congratulations! You win ${humanScore}:${computerScore}.`)
+      } else if (computerScore > humanScore) {
+        console.log(`Oops! You lost ${computerScore}:${humanScore}. Better luck next time!`)
       } else {
-        console.log("Invalid Input, please try again.")
+        console.log(`Its a tie! The final score is ${humanScore}:${computerScore}`)
       }
     }
 
-    const humanSelection = getHumanChoice();
-    const computerSelection = getComputerChoice();
+    playGame()
 
-    playRound(humanSelection, computerSelection);
+
   </script>
 </body>
 </html>
