@@ -1,65 +1,169 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="style.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Title</title>
-  </head>
-  <body>
-    <p class="roundCounter">
-      Round 1
-    </p>
 
-    <div class="scores">
-      <div class="circle"></div>
-      <div class="circle"></div>
-      <div class="circle"></div>
-      <div class="circle"></div>
-      <div class="circle"></div>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Title</title>
+</head>
+
+<body>
+  <p class="roundCounter">
+    Round 1
+  </p>
+
+  <div class="scores">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div>
+
+  <p class="instructions">
+    Player, choose one of the following:
+  </p>
+
+  <div class="choices">
+    <div class="choice" id="scissors">
+      <img src="assets/scissors.png" alt="Scissors">
+      Scissors
     </div>
 
-    <p class="instructions">
-      Player, choose one of the following:
-    </p>
-
-    <div class="choices">
-      <div class="choice">
-        <img src="assets/scissors.png" alt="Scissors">
-        Scissors
-      </div>
-
-      <div class="choice">
-        <img src="assets/paper.png" class="paper" alt="Paper">
-        Paper
-      </div>
-
-      <div class="choice">
-        <img src="assets/rock.png" alt="Rock">
-        Stone
-      </div>
-
-      <div class="choice">
-        <img src="assets/lizard.png" alt="Lizard">
-        Lizard
-      </div>
-
-      <div class="choice">
-        <img src="assets/spock.png" alt="Spock">
-        Spock
-      </div>
+    <div class="choice" id="paper">
+      <img src="assets/paper.png" class="paper_img" alt="Paper">
+      Paper
     </div>
 
-    <div class="logos">
-      <div class="logo">
-        <img src="assets/dark.png" alt="Dark Mode">
-      </div>
-      <div class="logo">
-        <img src="assets/settings.png" alt="Settings">
-      </div>
-      <div class="logo">
-        <img src="assets/info.png" alt="Information">
-      </div>
+    <div class="choice" id="rock">
+      <img src="assets/rock.png" alt="Rock">
+      Rock
     </div>
-  </body>
+
+    <div class="choice" id="lizard">
+      <img src="assets/lizard.png" alt="Lizard">
+      Lizard
+    </div>
+
+    <div class="choice" id="spock">
+      <img src="assets/spock.png" alt="Spock">
+      Spock
+    </div>
+  </div>
+
+  <div class="logos">
+    <div class="logo">
+      <img src="assets/dark.png" alt="Dark Mode">
+    </div>
+    <div class="logo">
+      <img src="assets/settings.png" alt="Settings">
+    </div>
+    <div class="logo">
+      <img src="assets/info.png" alt="Information">
+    </div>
+  </div>
+
+  <script>
+    function getComputerChoice() {
+      let choice = Math.floor(Math.random() * 5);
+      if (choice === 0) {
+        return "rock";
+      } else if (choice === 1) {
+        return "paper";
+      } else if (choice === 2) {
+        return "scissors";
+      } else if (choice === 3) {
+        return "lizard";
+      } else {
+        return "spock";
+      }
+    }
+
+    function win(card) {
+      humanScore += 1;
+      card.setAttribute("style", "color: var(--cardtext-win-light); background-color: var(--cardbg-win-light); border-colour: var(--cardborder-win-light);");
+    }
+
+    function lose(card) {
+      computerScore += 1;
+      card.setAttribute("style", "color: var(--cardborder-lose-light); background-color: var(--cardbg-lose-light); border-colour: var(--cardborder-lose-light);");
+    }
+
+    let humanScore = 0, computerScore = 0
+    let round = 1
+
+    const result = document.querySelector(".instructions");
+    const choices = document.querySelectorAll(".choice");
+    choices.forEach((choice) => {
+      choice.addEventListener("click", () => {
+        const comChoice = getComputerChoice();
+        if (comChoice == choice.id) {
+          result.textContent = `It\'s a tie! Both sides chose ${choice.id}.`
+        } else if (comChoice == "spock" && choice.id == "scissors") {
+          lose(choice);
+          result.textContent = "The opponent's Spock smashes your Scissors!";
+        } else if (comChoice == "scissors" && choice.id == "spock") {
+          win(choice);
+          result.textContent = "Your Spock smashes the opponent's Scissors!";
+        } else if (comChoice == "scissors" && choice.id == "paper") {
+          lose(choice);
+          result.textContent = "The opponent's Scissors cuts your Paper!";
+        } else if (comChoice == "paper" && choice.id == "scissors") {
+          win(choice);
+          result.textContent = "Your Scissors cuts the opponent's Paper!";
+        } else if (comChoice == "paper" && choice.id == "rock") {
+          lose(choice);
+          result.textContent = "The opponent's Paper covers your Rock!";
+        } else if (comChoice == "rock" && choice.id == "paper") {
+          win(choice);
+          result.textContent = "Your Paper covers the opponent's Rock!";
+        } else if (comChoice == "rock" && choice.id == "lizard") {
+          lose(choice);
+          result.textContent = "The opponent's Rock crushes your Lizard!";
+        } else if (comChoice == "lizard" && choice.id == "rock") {
+          win(choice);
+          result.textContent = "Your Rock crushes the opponent's Lizard!";
+        } else if (comChoice == "lizard" && choice.id == "spock") {
+          lose(choice);
+          result.textContent = "The opponent's Lizard poisons your Spock!";
+        } else if (comChoice == "spock" && choice.id == "lizard") {
+          win(choice);
+          result.textContent = "Your Lizard poisons the opponent's Spock!";
+        } else if (comChoice == "spock" && choice.id == "rock") {
+          lose(choice);
+          result.textContent = "The opponent's Spock vaporizes your Rock!";
+        } else if (comChoice == "rock" && choice.id == "spock") {
+          win(choice);
+          result.textContent = "Your Spock vaporizes the opponent's Rock!";
+        } else if (comChoice == "rock" && choice.id == "scissors") {
+          lose(choice);
+          result.textContent = "The opponent's Rock crushes your Scissors!";
+        } else if (comChoice == "scissors" && choice.id == "rock") {
+          win(choice);
+          result.textContent = "Your Scissors crushes the opponent's Rock!";
+        } else if (comChoice == "scissors" && choice.id == "lizard") {
+          lose(choice);
+          result.textContent = "The opponent's Scissors decapitates your Lizard!";
+        } else if (comChoice == "lizard" && choice.id == "scissors") {
+          win(choice);
+          result.textContent = "Your Scissors decapitates the opponent's Lizard!";
+        } else if (comChoice == "lizard" && choice.id == "paper") {
+          lose(choice);
+          result.textContent = "The opponent's Lizard eats your Paper!";
+        } else if (comChoice == "paper" && choice.id == "lizard") {
+          win(choice);
+          result.textContent = "Your Lizard eats the opponent's Paper!";
+        } else if (comChoice == "paper" && choice.id == "spock") {
+          lose(choice);
+          result.textContent = "The opponent's Paper disproves your Spock!";
+        } else {
+          lose(choice);
+          result.textContent = "Your Paper disproves the opponent's Spock!";
+        }
+      });
+    });
+  </script>
+</body>
+
 </html>
