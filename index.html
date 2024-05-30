@@ -23,9 +23,11 @@
     <div class="circle"></div>
   </div>
 
-  <p class="instructions">
-    Player, choose one of the following:
-  </p>
+  <div class="instructions-box">
+    <p class="instructions">Player, it's your turn!</p>
+    <p2 class="sub-instructions">Choose one of the following:</p2>
+  </div>
+  
 
   <div class="choices">
     <div class="choice" id="scissors">
@@ -55,7 +57,7 @@
   </div>
 
   <div class="flex"></div>
-  
+
   <div class="logos">
     <div class="logo">
       <img src="assets/dark.png" alt="Dark Mode">
@@ -84,89 +86,121 @@
       }
     }
 
-    function win(card) {
-      humanScore += 1;
-      card.setAttribute("style", "color: var(--cardtext-win-light); background-color: var(--cardbg-win-light); border-colour: var(--cardborder-win-light);");
-    }
-
-    function lose(card) {
-      computerScore += 1;
-      card.setAttribute("style", "color: var(--cardborder-lose-light); background-color: var(--cardbg-lose-light); border-colour: var(--cardborder-lose-light);");
-    }
-
+    const instructionsBox = document.querySelector(".instructions-box");
+    const result = document.querySelector(".instructions");
+    const subInstructions = document.querySelector(".sub-instructions");
+    const choices = document.querySelectorAll(".choice");
+    let choiceEnabled = true;
     let humanScore = 0, computerScore = 0
     let round = 1
 
-    const result = document.querySelector(".instructions");
-    const choices = document.querySelectorAll(".choice");
+    function toggleChoiceClick(toggle) {
+      if (toggle == true) {
+        choiceEnabled = true;
+      } else if (toggle == false) {
+        choiceEnabled = false;
+      }
+    }
+
+    function resetRound() {
+      toggleChoiceClick(true);
+      choices.forEach((choice) => {
+        choice.setAttribute("style", "color: var(--cardtext-light); background-color: var(--cardbg-light); border-color: var(--cardborder-light);");
+      });
+      result.textContent = "Player, it's your turn!";
+      subInstructions.textContent = "Choose one of the following:";
+    }
+
+    instructionsBox.addEventListener("click", () => {
+      if (choiceEnabled === false) {
+        resetRound();
+      }
+    });
+
+    function win(choice) {
+      humanScore += 1;
+      choice.setAttribute("style", "color: var(--cardtext-win-light); background-color: var(--cardbg-win-light); border-color: var(--cardborder-win-light);");
+    }
+
+    function lose(choice) {
+      computerScore += 1;
+      choice.setAttribute("style", "color: var(--cardborder-lose-light); background-color: var(--cardbg-lose-light); border-color: var(--cardborder-lose-light);");
+    }
+
     choices.forEach((choice) => {
       choice.addEventListener("click", () => {
-        const comChoice = getComputerChoice();
-        if (comChoice == choice.id) {
-          result.textContent = `It\'s a tie! Both sides chose ${choice.id}.`
-        } else if (comChoice == "spock" && choice.id == "scissors") {
-          lose(choice);
-          result.textContent = "The opponent's Spock smashes your Scissors!";
-        } else if (comChoice == "scissors" && choice.id == "spock") {
-          win(choice);
-          result.textContent = "Your Spock smashes the opponent's Scissors!";
-        } else if (comChoice == "scissors" && choice.id == "paper") {
-          lose(choice);
-          result.textContent = "The opponent's Scissors cuts your Paper!";
-        } else if (comChoice == "paper" && choice.id == "scissors") {
-          win(choice);
-          result.textContent = "Your Scissors cuts the opponent's Paper!";
-        } else if (comChoice == "paper" && choice.id == "rock") {
-          lose(choice);
-          result.textContent = "The opponent's Paper covers your Rock!";
-        } else if (comChoice == "rock" && choice.id == "paper") {
-          win(choice);
-          result.textContent = "Your Paper covers the opponent's Rock!";
-        } else if (comChoice == "rock" && choice.id == "lizard") {
-          lose(choice);
-          result.textContent = "The opponent's Rock crushes your Lizard!";
-        } else if (comChoice == "lizard" && choice.id == "rock") {
-          win(choice);
-          result.textContent = "Your Rock crushes the opponent's Lizard!";
-        } else if (comChoice == "lizard" && choice.id == "spock") {
-          lose(choice);
-          result.textContent = "The opponent's Lizard poisons your Spock!";
-        } else if (comChoice == "spock" && choice.id == "lizard") {
-          win(choice);
-          result.textContent = "Your Lizard poisons the opponent's Spock!";
-        } else if (comChoice == "spock" && choice.id == "rock") {
-          lose(choice);
-          result.textContent = "The opponent's Spock vaporizes your Rock!";
-        } else if (comChoice == "rock" && choice.id == "spock") {
-          win(choice);
-          result.textContent = "Your Spock vaporizes the opponent's Rock!";
-        } else if (comChoice == "rock" && choice.id == "scissors") {
-          lose(choice);
-          result.textContent = "The opponent's Rock crushes your Scissors!";
-        } else if (comChoice == "scissors" && choice.id == "rock") {
-          win(choice);
-          result.textContent = "Your Scissors crushes the opponent's Rock!";
-        } else if (comChoice == "scissors" && choice.id == "lizard") {
-          lose(choice);
-          result.textContent = "The opponent's Scissors decapitates your Lizard!";
-        } else if (comChoice == "lizard" && choice.id == "scissors") {
-          win(choice);
-          result.textContent = "Your Scissors decapitates the opponent's Lizard!";
-        } else if (comChoice == "lizard" && choice.id == "paper") {
-          lose(choice);
-          result.textContent = "The opponent's Lizard eats your Paper!";
-        } else if (comChoice == "paper" && choice.id == "lizard") {
-          win(choice);
-          result.textContent = "Your Lizard eats the opponent's Paper!";
-        } else if (comChoice == "paper" && choice.id == "spock") {
-          lose(choice);
-          result.textContent = "The opponent's Paper disproves your Spock!";
-        } else {
-          lose(choice);
-          result.textContent = "Your Paper disproves the opponent's Spock!";
+        if (choiceEnabled === true) {
+          toggleChoiceClick(false);
+          const comChoice = getComputerChoice();
+          subInstructions.textContent = "Click here to continue.";
+          if (comChoice == choice.id) {
+            result.textContent = `It\'s a tie! Both sides chose ${choice.id}.`
+          } else if (comChoice == "spock" && choice.id == "scissors") {
+            lose(choice);
+            result.textContent = "The opponent's Spock smashes your Scissors!";
+          } else if (comChoice == "scissors" && choice.id == "spock") {
+            win(choice);
+            result.textContent = "Your Spock smashes the opponent's Scissors!";
+          } else if (comChoice == "scissors" && choice.id == "paper") {
+            lose(choice);
+            result.textContent = "The opponent's Scissors cuts your Paper!";
+          } else if (comChoice == "paper" && choice.id == "scissors") {
+            win(choice);
+            result.textContent = "Your Scissors cuts the opponent's Paper!";
+          } else if (comChoice == "paper" && choice.id == "rock") {
+            lose(choice);
+            result.textContent = "The opponent's Paper covers your Rock!";
+          } else if (comChoice == "rock" && choice.id == "paper") {
+            win(choice);
+            result.textContent = "Your Paper covers the opponent's Rock!";
+          } else if (comChoice == "rock" && choice.id == "lizard") {
+            lose(choice);
+            result.textContent = "The opponent's Rock crushes your Lizard!";
+          } else if (comChoice == "lizard" && choice.id == "rock") {
+            win(choice);
+            result.textContent = "Your Rock crushes the opponent's Lizard!";
+          } else if (comChoice == "lizard" && choice.id == "spock") {
+            lose(choice);
+            result.textContent = "The opponent's Lizard poisons your Spock!";
+          } else if (comChoice == "spock" && choice.id == "lizard") {
+            win(choice);
+            result.textContent = "Your Lizard poisons the opponent's Spock!";
+          } else if (comChoice == "spock" && choice.id == "rock") {
+            lose(choice);
+            result.textContent = "The opponent's Spock vaporizes your Rock!";
+          } else if (comChoice == "rock" && choice.id == "spock") {
+            win(choice);
+            result.textContent = "Your Spock vaporizes the opponent's Rock!";
+          } else if (comChoice == "rock" && choice.id == "scissors") {
+            lose(choice);
+            result.textContent = "The opponent's Rock crushes your Scissors!";
+          } else if (comChoice == "scissors" && choice.id == "rock") {
+            win(choice);
+            result.textContent = "Your Scissors crushes the opponent's Rock!";
+          } else if (comChoice == "scissors" && choice.id == "lizard") {
+            lose(choice);
+            result.textContent = "The opponent's Scissors decapitates your Lizard!";
+          } else if (comChoice == "lizard" && choice.id == "scissors") {
+            win(choice);
+            result.textContent = "Your Scissors decapitates the opponent's Lizard!";
+          } else if (comChoice == "lizard" && choice.id == "paper") {
+            lose(choice);
+            result.textContent = "The opponent's Lizard eats your Paper!";
+          } else if (comChoice == "paper" && choice.id == "lizard") {
+            win(choice);
+            result.textContent = "Your Lizard eats the opponent's Paper!";
+          } else if (comChoice == "paper" && choice.id == "spock") {
+            lose(choice);
+            result.textContent = "The opponent's Paper disproves your Spock!";
+          } else {
+            lose(choice);
+            result.textContent = "Your Paper disproves the opponent's Spock!";
+          }
         }
       });
     });
+
+
   </script>
 </body>
 
