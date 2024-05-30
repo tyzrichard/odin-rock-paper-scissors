@@ -27,7 +27,7 @@
     <p class="instructions">Player, it's your turn!</p>
     <p2 class="sub-instructions">Choose one of the following:</p2>
   </div>
-  
+
 
   <div class="choices">
     <div class="choice" id="scissors">
@@ -90,9 +90,14 @@
     const result = document.querySelector(".instructions");
     const subInstructions = document.querySelector(".sub-instructions");
     const choices = document.querySelectorAll(".choice");
+    const roundCounter = document.querySelector(".roundCounter");
+    const scores = document.querySelector(".scores")
     let choiceEnabled = true;
     let humanScore = 0, computerScore = 0
     let round = 1
+    gameOver = false;
+
+    const logos = document.querySelectorAll(".logo");
 
     function toggleChoiceClick(toggle) {
       if (toggle == true) {
@@ -103,28 +108,55 @@
     }
 
     function resetRound() {
-      toggleChoiceClick(true);
       choices.forEach((choice) => {
         choice.setAttribute("style", "color: var(--cardtext-light); background-color: var(--cardbg-light); border-color: var(--cardborder-light);");
       });
-      result.textContent = "Player, it's your turn!";
-      subInstructions.textContent = "Choose one of the following:";
+      if (round < 5) {
+        result.textContent = "Player, it's your turn!";
+        subInstructions.textContent = "Choose one of the following:";
+        round++;
+        roundCounter.textContent = `Round ${round}`;
+        toggleChoiceClick(true);
+      } else {
+        gameOver = true;
+        if (humanScore > computerScore) {
+          roundCounter.textContent = "You Win!"
+          result.textContent = `Congratulations! You beat the opponent ${humanScore}-${computerScore}.`
+          subInstructions.textContent = "Wanna have another go? You know what to do!";
+        } else if (humanScore < computerScore) {
+          roundCounter.textContent = "You Lose!"
+          result.textContent = `Oopsies! You lost to the opponent ${humanScore}-${computerScore}.`
+          subInstructions.textContent = "Wanna have another go? You know what to do!";
+        } else if (humanScore == computerScore) {
+          roundCounter.textContent = "You Tied!"
+          result.textContent = `What a tough match! You tied with the opponent ${humanScore}-${computerScore}.`
+          subInstructions.textContent = "Wanna have another go? You know what to do!";
+        }
+      }
     }
 
     instructionsBox.addEventListener("click", () => {
-      if (choiceEnabled === false) {
+      if (choiceEnabled === false && gameOver == false) {
         resetRound();
+      } else if (gameOver == true) {
+        round = 0, computerScore = 0, humanScore = 0, choiceEnabled = true, gameOver = false;
+        resetRound();
+        for (const child of scores.children) {
+          child.setAttribute("style", "background-color: var(--circle-blank-light)");
+        }
       }
     });
 
     function win(choice) {
       humanScore += 1;
       choice.setAttribute("style", "color: var(--cardtext-win-light); background-color: var(--cardbg-win-light); border-color: var(--cardborder-win-light);");
+      scores.children[round - 1].setAttribute("style", "background-color: var(--circle-win-light)");
     }
 
     function lose(choice) {
       computerScore += 1;
       choice.setAttribute("style", "color: var(--cardborder-lose-light); background-color: var(--cardbg-lose-light); border-color: var(--cardborder-lose-light);");
+      scores.children[round - 1].setAttribute("style", "background-color: var(--circle-lose-light)");
     }
 
     choices.forEach((choice) => {
@@ -135,6 +167,7 @@
           subInstructions.textContent = "Click here to continue.";
           if (comChoice == choice.id) {
             result.textContent = `It\'s a tie! Both sides chose ${choice.id}.`
+            scores.children[round - 1].setAttribute("style", "background-color: var(--circle-tie-light)");
           } else if (comChoice == "spock" && choice.id == "scissors") {
             lose(choice);
             result.textContent = "The opponent's Spock smashes your Scissors!";
@@ -193,13 +226,18 @@
             lose(choice);
             result.textContent = "The opponent's Paper disproves your Spock!";
           } else {
-            lose(choice);
+            win(choice);
             result.textContent = "Your Paper disproves the opponent's Spock!";
           }
         }
       });
     });
 
+    logos.forEach((logo) => {
+      logo.addEventListener("click", () => {
+        alert("This feature will be added in a future update!");
+      })
+    })
 
   </script>
 </body>

@@ -2,14 +2,15 @@
     --background-light: #EDE1CF;
     --circle-win-light: #87CF7D;
     --circle-lose-light: #DE6363;
-    --circle-tie-light: #D9D9D9;
+    --circle-tie-light: #FFDFA0;
+    --circle-blank-light: #D9D9D9;
     --circle-current-light: #9DE3F9;
     --circleborder-light: #4D4639;
     --cardbg-light: #FFDFA0;
     --cardborder-light: #261A00;
     --cardtext-light: #785A0B;
     --cardbg-win-light: #CCEBC4;
-    --cardborder-win-light: #082008;
+    --cardborder-win-light: #0f560f;
     --cardtext-win-light: #4A6546;
     --cardbg-lose-light: #FFB9B1;
     --cardborder-lose-light: #BA1A1A;
@@ -49,7 +50,7 @@ body {
 .circle {
     height: 20px;
     width: 20px;
-    background-color: var(--circle-tie-light);
+    background-color: var(--circle-blank-light);
     border: 2px solid var(--circleborder-light);
     border-radius: 50%;
     display: inline-block;
